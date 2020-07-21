@@ -6,8 +6,6 @@ function genPoints(num)
     local res = {}
     local w, h = love.graphics.getDimensions()
     for i = 1, num do
-        --local px = love.math.random() < 0.5 and lm.random(-space, 0) or lm.random(w + 1, w + space)
-        --local py = love.math.random() < 0.5 and lm.random(-space, 0) or lm.random(h + 1, h + space)
 
         local px, py
         repeat
@@ -15,16 +13,6 @@ function genPoints(num)
             py = lm.random(-space + -100, h + space + 100)
         until (px < 0 or px > w) or (py < 0 or py > h)
        
-        --repeat
-            --py = lm.random(-space, h + space)
-        --until py < 0 or py > h
-
-        print("px, py", px, py)
-        --repeat
-            --py = lm.random(-space, h + space)
-        --until py > 0 and px < h
-        --py = 10
-        
         res[i] = {
             x = px,
             y = py,
@@ -52,11 +40,9 @@ function drawText2Canvas()
     love.graphics.clear()
 
     love.graphics.setColor{1, 1, 1, 1}
-    --love.graphics.printf("Some message", 0, (h - font:getHeight()) / 2, 1000, "center")
     local msg = "Cubrik"
     local tx = (w - font:getWidth(msg)) / 2
     local ty = (h - font:getHeight()) / 2
-    print("ty", ty)
     love.graphics.print(msg, tx, (h - font:getHeight()) / 2)
 
     love.graphics.setCanvas()
@@ -77,8 +63,6 @@ function setupEffect()
         return r, g, b, a
     end)
 
-    print("#textPoints", #textPoints)
-
     points = genPoints(#textPoints)
 
     for k, v in pairs(points) do
@@ -92,24 +76,19 @@ love.load = function()
 end
 
 function updatePoints(points)
-    --local newpoints = {}
     for k, v in pairs(points) do
         if not v.done then
-            --local dx, dy = math.abs(v.x - v.pix[1]), math.abs(v.y - v.pix[2])
             v.x, v.y = v.x + v.dir.x, v.y + v.dir.y
             local dx, dy = math.abs(v.x - v.pix[1]), math.abs(v.y - v.pix[2])
             if dx <= 1 or dy <= 1 then
                 v.done = true
                 v.x = v.pix[1]
                 v.y = v.pix[2]
-                --print("done")
             else
                 v.x, v.y = v.x + v.dir.x, v.y + v.dir.y
             end
-            --table.insert(newpoints, v)
         end
     end
-    --return newpoints
     return points
 end
 
@@ -126,7 +105,6 @@ end
 
 love.draw = function()
     drawPoints(points)
-    --love.graphics.draw(textCanvas)
 end
 
 love.update = function(dt)
